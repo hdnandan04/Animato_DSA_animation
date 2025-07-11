@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DSA Animation Website</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Resetting default margin and padding */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        header {
+            background: linear-gradient(135deg, #e09812 0%, #d17a11 100%);
+            color: #fff;
+            padding: 1.5rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        h1 {
+            font-size: 1.8rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        nav ul li a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 1.1rem;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        nav ul li a:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        nav ul li a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            background: #fff;
+            bottom: 0;
+            left: 0;
+            transition: width 0.3s ease;
+        }
+
+        nav ul li a:hover::after {
+            width: 100%;
+        }
+
+        main {
+            padding: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .hero {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding: 3rem 1rem;
+            background: linear-gradient(135deg, rgba(224, 152, 18, 0.1) 0%, rgba(209, 122, 17, 0.1) 100%);
+            border-radius: 12px;
+        }
+
+        .hero h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: #2c3e50;
+            font-weight: 600;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            color: #555;
+            max-width: 700px;
+            margin: 0 auto 2rem;
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .animation-card {
+            background-color: #fff;
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .animation-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(224, 152, 18, 0.15);
+            border-color: rgba(224, 152, 18, 0.2);
+        }
+
+        .animation-card h3 {
+            font-size: 1.4rem;
+            margin-bottom: 1rem;
+            color: #2c3e50;
+            font-weight: 600;
+        }
+
+        .animation-card p {
+            margin-bottom: 1.5rem;
+            color: #666;
+            flex-grow: 1;
+        }
+
+        .animation-card img {
+            width: 100%;
+            height: 180px;
+            object-fit: contain;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            background-color: #f5f5f5;
+            padding: 0.5rem;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 0.8rem 1.5rem;
+            background: linear-gradient(135deg, #e09812 0%, #d17a11 100%);
+            color: #fff;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            text-align: center;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(224, 152, 18, 0.2);
+        }
+
+        .btn:hover {
+            background: linear-gradient(135deg, #d17a11 0%, #b8650f 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(224, 152, 18, 0.3);
+        }
+
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                padding: 1rem;
+            }
+            
+            h1 {
+                margin-bottom: 1rem;
+            }
+            
+            nav ul {
+                gap: 0.8rem;
+            }
+            
+            .hero h2 {
+                font-size: 2rem;
+            }
+            
+            .hero {
+                padding: 2rem 1rem;
+            }
+            
+            .features {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>DSA Animation</h1>
+        <nav>
+            <ul>
+                <li><a href="app.html">Applications</a></li>
+            </ul>
+        </nav>
+    </header>
+    
+    <main>
+        <section class="hero">
+            <h2>Welcome to DSA Animation</h2>
+            <p>Explore interactive animations of various data structures and algorithms to enhance your understanding.</p>
+        </section>
+        
+        <section class="features">
+            <div class="animation-card">
+                <h3>Array</h3>
+                <img src="ar.png" alt="Array Animation">
+                <p>Visualize array operations and algorithms with our interactive animation tool.</p>
+                <a href="array.html" class="btn">View Animation</a>
+            </div>
+
+            <div class="animation-card">
+                <h3>Linked List</h3>
+                <img src="ll.png" alt="Linked List Animation">
+                <p>Learn about linked lists and their operations through an interactive animation.</p>
+                <a href="linked list.html" class="btn">View Animation</a>
+            </div>
+            
+            <div class="animation-card">
+                <h3>Queue</h3>
+                <img src="queu.png" alt="Queue Animation">
+                <p>Visualize Queue operations and algorithms with step-by-step animations.</p>
+                <a href="queue.html" class="btn">View Animation</a>
+            </div>
+
+            <div class="animation-card">
+                <h3>Stack</h3>
+                <img src="stack.png" alt="Stack Animation">
+                <p>Interactive animation demonstrating stack operations and algorithms.</p>
+                <a href="stack.html" class="btn">View Animation</a>
+            </div>
+
+            <div class="animation-card">
+                <h3>Graph</h3>
+                <img src="graph.png" alt="Graph Animation">
+                <p>Explore graph algorithms and traversal techniques with our interactive animation.</p>
+                <a href="graphs.html" class="btn">View Animation</a>
+            </div>
+
+            <div class="animation-card">
+                <h3>Tree</h3>
+                <img src="tree.png" alt="Tree Animation">
+                <p>Visualize tree data structures and algorithms in action with detailed animations.</p>
+                <a href="tree.html" class="btn">View Animation</a>
+            </div>
+        </section>
+    </main>
+</body>
+</html>

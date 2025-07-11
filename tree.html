@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Graph Operations</title>
+  <style>
+    :root {
+    --primary: #e09812;
+    --primary-dark: #d17a11;
+    --secondary: #4CAF50;
+    --light-bg: #f8f9fa;
+    --dark-text: #2c3e50;
+    --light-text: #666;
+    --white: #ffffff;
+    --card-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  }
+      h1, h2 {
+    color: var(--primary);
+    font-weight: 600;
+  }
+   .card {
+    background: var(--white);
+    border-radius: 10px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    box-shadow: var(--card-shadow);
+  }
+    body {
+  font-family: 'Poppins', sans-serif;
+  background-color: #f8f9fa;
+  color: #2c3e50;
+  line-height: 1.6;
+  padding: 20px;
+}
+    .tree-container {
+      margin-top: 50px;
+      text-align: center;
+    }
+    .tree {
+      display: flex;
+      justify-content: center;
+      position: relative;
+    }
+    .tree ul {
+  padding-top: 20px;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.tree li {
+  position: relative;
+  padding: 20px 5px 0 5px;
+  list-style-type: none;
+  text-align: center;
+  display: inline-block;
+  vertical-align: top;
+}
+
+/* Connectors */
+.tree li::before, .tree li::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  width: 50%;
+  height: 20px;
+  border-top: 2px solid #000;
+}
+
+.tree li::before {
+  left: 0;
+  border-right: 2px solid #000;
+}
+
+.tree li::after {
+  right: 0;
+  border-left: 2px solid #000;
+}
+
+/* Remove connectors from root */
+.tree li:only-child::before,
+.tree li:only-child::after {
+  display: none;
+}
+#description {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  line-height: 1.7;
+  margin: 20px 0;
+}
+
+/* Remove right connector from left-most child */
+.tree li:first-child::before {
+  border: none;
+}
+
+/* Remove left connector from right-most child */
+.tree li:last-child::after {
+  border: none;
+}
+.quiz p {
+  font-weight: 500;
+  margin: 15px 0 8px;
+  color: #333;
+}
+.quiz label:hover {
+  background-color: rgba(224, 152, 18, 0.1);
+}
+.quiz label {
+  display: block;
+  padding: 8px 12px;
+  margin: 5px 0;
+  border-radius: 6px;
+  transition: all 0.2s;
+}
+/* Node style */
+.node {
+  border: 2px solid #333;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  background-color: #e09812;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-weight: bold;
+  margin: auto;
+}
+
+    .tree-buttons {
+      margin-top: 20px;
+    }
+    button {
+    margin-top: 20px;
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  button:hover {
+    background-color: #45a049;
+  }
+  </style>
+</head>
+<body>
+
+<h1>Tree</h1>
+<p id="description">A tree is a hierarchical data structure consisting of nodes connected by edges, where each node has zero or more child nodes. It has a single root node, and every child node has a unique parent node. Trees are used to represent hierarchical relationships and organize data efficiently. Common operations include insertion, deletion, traversal (e.g., in-order, pre-order, post-order), and searching for specific elements</p>
+
+<div id="videoContainer">
+  <h2>Tree Overview Video</h2>
+  <iframe width="560" height="315" src="https://www.youtube.com/embed/Etpc_-br5rI" frameborder="0" allowfullscreen></iframe>
+</div>
+
+<div class="tree-container">
+  <h2>Tree Visualization</h2>
+  <div class="tree" id="binaryTree"></div>
+  <div class="tree-buttons">
+    <button onclick="addToTree()">Insert Node</button>
+    <button onclick="resetTree()">Reset Tree</button>
+  </div>
+</div>
+
+<section class="quiz">
+  <h2>Quiz</h2>
+  <form id="quizForm">
+    <p>1. What is a tree data structure?</p>
+    <label><input type="radio" name="q1" value="a"> A linear data structure</label><br>
+    <label><input type="radio" name="q1" value="b"> A hierarchical data structure</label><br>
+    <label><input type="radio" name="q1" value="c"> A non-linear data structure</label><br>
+
+    <p>2. Which of the following is NOT a basic component of a tree?</p>
+    <label><input type="radio" name="q2" value="a"> Node</label><br>
+    <label><input type="radio" name="q2" value="b"> Edge</label><br>
+    <label><input type="radio" name="q2" value="c"> Pointer</label><br>
+
+    <p>3. What is the root of a tree?</p>
+    <label><input type="radio" name="q3" value="a"> The node with the highest value</label><br>
+    <label><input type="radio" name="q3" value="b"> The topmost node without any parent</label><br>
+    <label><input type="radio" name="q3" value="c"> The node with the lowest value</label><br>
+
+    <p>4. What is the height of a tree?</p>
+    <label><input type="radio" name="q4" value="a"> The number of nodes in the tree</label><br>
+    <label><input type="radio" name="q4" value="b"> The number of edges in the longest path from the root to a leaf node</label><br>
+    <label><input type="radio" name="q4" value="c"> The depth of the root node</label><br>
+
+    <p>5. Which type of tree has at most two children for each node?</p>
+    <label><input type="radio" name="q5" value="a"> Binary tree</label><br>
+    <label><input type="radio" name="q5" value="b"> AVL tree</label><br>
+    <label><input type="radio" name="q5" value="c"> Red-Black tree</label><br>
+
+    <p>6. What is a leaf node in a tree?</p>
+    <label><input type="radio" name="q6" value="a"> The root node</label><br>
+    <label><input type="radio" name="q6" value="b"> A node with only one child</label><br>
+    <label><input type="radio" name="q6" value="c"> A node without any children</label><br>
+
+    <p>7. Which of the following tree traversal algorithms starts from the root?</p>
+    <label><input type="radio" name="q7" value="a"> Pre-order traversal</label><br>
+    <label><input type="radio" name="q7" value="b"> In-order traversal</label><br>
+    <label><input type="radio" name="q7" value="c"> Post-order traversal</label><br>
+
+    <p>8. What is the time complexity of searching for a key in a binary search tree (BST)?</p>
+    <label><input type="radio" name="q8" value="a"> O(1)</label><br>
+    <label><input type="radio" name="q8" value="b"> O(log n)</label><br>
+    <label><input type="radio" name="q8" value="c"> O(n)</label><br>
+
+    <p>9. Which operation adds a new node to a binary search tree (BST)?</p>
+    <label><input type="radio" name="q9" value="a"> Insert</label><br>
+    <label><input type="radio" name="q9" value="b"> Delete</label><br>
+    <label><input type="radio" name="q9" value="c"> Search</label><br>
+
+    <p>10. Which of the following is NOT a type of binary tree?</p>
+    <label><input type="radio" name="q10" value="a"> Full binary tree</label><br>
+    <label><input type="radio" name="q10" value="b"> Complete binary tree</label><br>
+    <label><input type="radio" name="q10" value="c"> Perfect binary tree</label><br>
+  </form>
+  <button onclick="checkTreeAnswers()">Check Answers</button>
+  <p id="treeQuizResult"></p>
+</section>
+
+<script>
+  // Binary Tree Node structure
+  class TreeNode {
+    constructor(value) {
+      this.value = value;
+      this.left = null;
+      this.right = null;
+    }
+  }
+
+  let root = null;
+  let valueCounter = 1;
+
+  function addToTree() {
+    root = insertLevelOrder(root, valueCounter++);
+    renderTree();
+  }
+
+  function insertLevelOrder(node, value) {
+    if (!node) return new TreeNode(value);
+    const queue = [node];
+    while (queue.length > 0) {
+      const current = queue.shift();
+      if (!current.left) {
+        current.left = new TreeNode(value);
+        break;
+      } else queue.push(current.left);
+      if (!current.right) {
+        current.right = new TreeNode(value);
+        break;
+      } else queue.push(current.right);
+    }
+    return node;
+  }
+
+  function renderTree() {
+    const container = document.getElementById("binaryTree");
+    container.innerHTML = "";
+    const treeHTML = buildTreeHTML(root);
+    container.appendChild(treeHTML);
+  }
+
+  function buildTreeHTML(node) {
+    if (!node) return document.createElement("div");
+
+    const ul = document.createElement("ul");
+    const li = document.createElement("li");
+    const nodeDiv = document.createElement("div");
+    nodeDiv.className = "node";
+    nodeDiv.textContent = node.value;
+
+    li.appendChild(nodeDiv);
+
+    if (node.left || node.right) {
+      const childUL = document.createElement("ul");
+      if (node.left) {
+        const leftLi = buildTreeHTML(node.left).firstChild;
+        childUL.appendChild(leftLi);
+      } else {
+        const placeholder = document.createElement("li");
+        placeholder.innerHTML = "<div class='node' style='opacity:0;'> </div>";
+        childUL.appendChild(placeholder);
+      }
+
+      if (node.right) {
+        const rightLi = buildTreeHTML(node.right).firstChild;
+        childUL.appendChild(rightLi);
+      } else {
+        const placeholder = document.createElement("li");
+        placeholder.innerHTML = "<div class='node' style='opacity:0;'> </div>";
+        childUL.appendChild(placeholder);
+      }
+
+      li.appendChild(childUL);
+    }
+
+    ul.appendChild(li);
+    return ul;
+  }
+
+  function resetTree() {
+    root = null;
+    valueCounter = 1;
+    renderTree();
+  }
+
+  function checkTreeAnswers() {
+    const answers = {
+      'q1': 'c',
+      'q2': 'c',
+      'q3': 'b',
+      'q4': 'b',
+      'q5': 'a',
+      'q6': 'c',
+      'q7': 'a',
+      'q8': 'b',
+      'q9': 'a',
+      'q10': 'b'
+    };
+    const quizResult = document.getElementById('treeQuizResult');
+    const form = document.getElementById('quizForm');
+    let correctCount = 0;
+    for (let q in answers) {
+      const selectedAnswer = form.querySelector('input[name="' + q + '"]:checked');
+      if (selectedAnswer && selectedAnswer.value === answers[q]) {
+        correctCount++;
+      }
+    }
+    quizResult.textContent = 'You got ' + correctCount + ' out of ' + Object.keys(answers).length + ' correct.';
+  }
+</script>
+</body>
+</html>

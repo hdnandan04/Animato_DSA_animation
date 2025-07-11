@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Maze Game</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+    --primary: #e09812;
+    --primary-dark: #d17a11;
+    --secondary: #4CAF50;
+    --light-bg: #f8f9fa;
+    --dark-text: #2c3e50;
+    --light-text: #666;
+    --white: #ffffff;
+    --card-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  }
+    
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: var(--light-bg);
+      color: var(--dark-text);
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    #page {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 2rem;
+    }
+    
+    #Message-Container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.7);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 100;
+      display: none;
+    }
+    
+    #message {
+      background-color: var(--white);
+      padding: 2rem;
+      border-radius: 10px;
+      text-align: center;
+      box-shadow: var(--card-shadow);
+      max-width: 400px;
+    }
+    
+    #message h1 {
+      color: var(--primary);
+      margin-bottom: 1rem;
+    }
+    
+    #message p {
+      margin-bottom: 1.5rem;
+      color: var(--light-text);
+    }
+    
+    #okBtn, #startMazeBtn {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+      color: var(--white);
+      border: none;
+      padding: 0.8rem 2rem;
+      font-size: 1rem;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      font-weight: 500;
+    }
+    
+    #okBtn:hover, #startMazeBtn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 12px rgba(137, 5, 189, 0.2);
+    }
+    
+    #menu {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 2rem;
+      align-items: center;
+    }
+    
+    .custom-select {
+      position: relative;
+    }
+    
+    .custom-select select {
+      appearance: none;
+      background: var(--white);
+      border: 2px solid #ddd;
+      border-radius: 6px;
+      padding: 0.8rem 2rem 0.8rem 1rem;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    
+    .custom-select select:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(137, 5, 189, 0.2);
+    }
+    
+    .custom-select::after {
+      content: "▼";
+      font-size: 0.8rem;
+      color: var(--primary);
+      position: absolute;
+      right: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      pointer-events: none;
+    }
+    
+    #view {
+      width: 100%;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    
+    #mazeContainer {
+      background: var(--white);
+      padding: 1rem;
+      border-radius: 10px;
+      box-shadow: var(--card-shadow);
+      margin-bottom: 2rem;
+    }
+    
+    #mazeCanvas {
+      width: 100%;
+      height: auto;
+      display: block;
+      border-radius: 6px;
+    }
+    
+    #instructions {
+      text-align: center;
+      color: var(--light-text);
+      margin-top: 1rem;
+      font-size: 1.1rem;
+    }
+    
+    @media (max-width: 768px) {
+      #menu {
+        flex-direction: column;
+        width: 100%;
+      }
+      
+      .custom-select, #startMazeBtn {
+        width: 100%;
+      }
+      
+      #mazeCanvas {
+        height: 300px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div id="page">
+
+    <div id="Message-Container">
+      <div id="message">
+        <h1>Congratulations!</h1>
+        <p>You've completed the maze!</p>
+        <p id="moves"></p>
+        <input id="okBtn" type="button" onclick="toggleVisablity('Message-Container')" value="Play Again" />
+      </div>
+    </div>
+
+    <div id="menu">
+      <div class="custom-select">
+        <select id="diffSelect">
+          <option value="10">Easy</option>
+          <option value="15">Medium</option>
+          <option value="25">Hard</option>
+          <option value="38">Extreme</option>                                      
+        </select>
+      </div>
+      <input id="startMazeBtn" type="button" onclick="makeMaze()" value="Start Game" />
+    </div>
+
+    <div id="view">
+      <div id="mazeContainer">
+        <canvas id="mazeCanvas" height="1100" width="1100"></canvas>
+      </div>
+    </div>
+
+    <p id="instructions">Use arrow keys to navigate from the key to the house!</p>
+
+  </div>
+
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery.touchswipe/1.6.18/jquery.touchSwipe.min.js"></script>
+  
+  <script src="./script.js"></script>
+</body>
+</html>

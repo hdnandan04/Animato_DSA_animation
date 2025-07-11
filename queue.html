@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Queue Demo</title>
+<style>
+  /* Consistent with previous pages */
+  :root {
+    --primary: #e09812;
+    --primary-dark: #d17a11;
+    --secondary: #4CAF50;
+    --light-bg: #f8f9fa;
+    --dark-text: #2c3e50;
+    --light-text: #666;
+    --white: #ffffff;
+    --card-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  }
+#description {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  line-height: 1.7;
+  margin: 20px 0;
+}
+   body {
+  font-family: 'Poppins', sans-serif;
+  background-color: #f8f9fa;
+  color: #2c3e50;
+  line-height: 1.6;
+  padding: 20px;
+}
+
+  header {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+    color: var(--white);
+    padding: 1.5rem;
+    text-align: center;
+    box-shadow: var(--card-shadow);
+  }
+
+  h1, h2 {
+    color: var(--primary);
+    font-weight: 600;
+  }
+
+  main {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 0 1.5rem;
+  }
+
+  /* Card styling matching previous pages */
+  .card {
+    background: var(--white);
+    border-radius: 10px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    box-shadow: var(--card-shadow);
+  }
+
+  /* Queue visualization matching linked list style */
+  .queue-visualization {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    padding: 1.5rem;
+    background: rgba(224, 152, 18, 0.05);
+    border-radius: 10px;
+    margin: 1.5rem 0;
+  }
+
+  .queue-element {
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+    color: var(--white);
+    font-size: 1.5rem;
+    font-weight: 600;
+    border-radius: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+    position: relative;
+    animation: fadeIn 0.5s ease-in-out;
+  }
+
+  /* Front/Rear indicators matching previous design language */
+  .front-indicator::after {
+    content: 'Front';
+    position: absolute;
+    bottom: -25px;
+    font-size: 0.8rem;
+    color: var(--primary);
+    font-weight: 500;
+  }
+
+  .rear-indicator::after {
+    content: 'Rear';
+    position: absolute;
+    bottom: -25px;
+    font-size: 0.8rem;
+    color: var(--primary);
+    font-weight: 500;
+  }
+
+  /* Buttons matching previous pages */
+   button {
+  background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+  padding: 12px 24px;
+  border-radius: 6px;
+  font-weight: 500;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  margin: 10px;
+  transition: all 0.3s ease;
+  border: none;
+  color: white;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+}
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.8); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+/* Enqueue Animation */
+.enqueue-animation {
+  animation: enqueue 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes enqueue {
+  0% { 
+    opacity: 0;
+    transform: translateX(50px) scale(0.5);
+  }
+  70% {
+    transform: translateX(-10px) scale(1.1);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+}
+
+/* Dequeue Animation */
+.dequeue-animation {
+  animation: dequeue 0.6s ease-in forwards;
+}
+
+@keyframes dequeue {
+  0% { 
+    opacity: 1;
+    transform: translateX(0);
+  }
+  30% {
+    transform: translateX(-20px) scale(0.9);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(-100px) scale(0.7);
+  }
+}
+
+/* Queue Shift Animation */
+.shift-animation {
+  transition: all 0.5s cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+/* Highlight Front and Rear */
+.front-element {
+  box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.7);
+  animation: pulse 1.5s infinite;
+}
+
+.rear-element {
+  box-shadow: 0 0 0 3px rgba(224, 152, 18, 0.7);
+  animation: pulse 1.5s infinite 0.5s;
+}
+
+@keyframes pulse {
+  0% { box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.7); }
+  50% { box-shadow: 0 0 0 8px rgba(76, 175, 80, 0); }
+  100% { box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.7); }
+}
+
+/* Operation Status Indicator */
+.operation-status {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  padding: 10px 20px;
+  background: var(--primary);
+  color: white;
+  border-radius: 5px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  animation: slideIn 0.3s ease-out, fadeOut 0.5s ease-in 2s forwards;
+}
+
+@keyframes slideIn {
+  from { transform: translateX(100%); }
+  to { transform: translateX(0); }
+}
+
+@keyframes fadeOut {
+  to { opacity: 0; }
+}
+  /* Info display matching previous design */
+  .info-display {
+    background: rgba(224, 152, 18, 0.1);
+    padding: 1rem;
+    border-radius: 8px;
+    margin: 1rem 0;
+  }
+
+  .info-display p {
+    margin: 0.5rem 0;
+    font-weight: 500;
+  }
+
+  /* Quiz section matching previous styling */
+  .quiz {
+  background: white;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  margin: 40px 0;
+}
+
+.quiz p {
+  font-weight: 500;
+  margin: 15px 0 8px;
+  color: #333;
+}
+
+.quiz label {
+  display: block;
+  padding: 8px 12px;
+  margin: 5px 0;
+  border-radius: 6px;
+  transition: all 0.2s;
+}
+
+  .quiz-option:hover {
+    background: rgba(224, 152, 18, 0.1);
+  }
+
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .btn-group {
+      flex-direction: column;
+      align-items: center;
+    }
+    .btn {
+      width: 100%;
+      max-width: 250px;
+      margin: 0.5rem 0;
+    }
+  }
+</style>
+</head>
+<body>
+
+
+
+<main>
+  <section id="theory">
+    <h2>Theory of Queues</h2>
+    <p id="description">A queue is a linear data structure that follows the First In, First Out (FIFO) principle. It means that the element that is inserted first is also the one that is deleted first. Elements are added to the rear end and removed from the front end of the queue.</p>
+    <p>Queues are used in various applications, such as CPU scheduling, printer queues, breadth-first search algorithms, and more.</p>
+  </section>
+
+  <section class="queue-container">
+    <div class="queue">
+      <div class="elements"></div>
+    </div>
+
+    <div class="queue info">
+      <p id="size"></p>
+      <p id="isEmpty"></p>
+      <p id="front"></p>
+      <p id="rear"></p>
+      <p id="peek"></p>
+    </div>
+
+    <div class="queue controls">
+      <button onclick="enqueue()">Enqueue</button>
+      <button onclick="dequeue()">Dequeue</button>
+      <button onclick="peek()">Peek</button>
+      <button onclick="isEmpty()">Is Empty?</button>
+      <button onclick="getSize()">Size</button>
+      <button onclick="getFront()">Front</button>
+      <button onclick="getRear()">Rear</button>
+    </div>
+  </section>
+
+  <section id="video">
+    <h2>Video: Introduction to Queues</h2>
+    <!-- Replace the src attribute value with your YouTube video URL -->
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/UpvDOm3prfI" frameborder="0" allowfullscreen></iframe>
+  </section>
+
+  <section class="quiz">
+    <h2>Quiz</h2>
+    <form id="quizForm">
+      <p>1. Which principle does a queue follow?</p>
+      <label><input type="radio" name="q1" value="a"> First In, Last Out (FILO)</label><br>
+      <label><input type="radio" name="q1" value="b"> First In, First Out (FIFO)</label><br>
+      <label><input type="radio" name="q1" value="c"> Last In, First Out (LIFO)</label><br>
+      
+      <p>2. What operation adds an element to the queue?</p>
+      <label><input type="radio" name="q2" value="a"> Pop</label><br>
+      <label><input type="radio" name="q2" value="b"> Dequeue</label><br>
+      <label><input type="radio" name="q2" value="c"> Enqueue</label><br>
+      
+      <p>3. Which operation removes an element from the queue?</p>
+      <label><input type="radio" name="q3" value="a"> Enqueue</label><br>
+      <label><input type="radio" name="q3" value="b"> Push</label><br>
+      <label><input type="radio" name="q3" value="c"> Dequeue</label><br>
+      
+      <p>4. What is the time complexity of enqueue operation in a queue?</p>
+      <label><input type="radio" name="q4" value="a"> O(1)</label><br>
+      <label><input type="radio" name="q4" value="b"> O(n)</label><br>
+      <label><input type="radio" name="q4" value="c"> O(log n)</label><br>
+      
+      <p>5. Which data structure is often used to implement a queue?</p>
+      <label><input type="radio" name="q5" value="a"> Linked List</label><br>
+      <label><input type="radio" name="q5" value="b"> Array</label><br>
+      <label><input type="radio" name="q5" value="c"> Stack</label><br>
+      
+      <p>6. What is the opposite operation of enqueue?</p>
+      <label><input type="radio" name="q6" value="a"> Pop</label><br>
+      <label><input type="radio" name="q6" value="b"> Dequeue</label><br>
+      <label><input type="radio" name="q6" value="c"> Push</label><br>
+      
+      <p>7. Which operation retrieves the front element of the queue without removing it?</p>
+      <label><input type="radio" name="q7" value="a"> Peek</label><br>
+      <label><input type="radio" name="q7" value="b"> Front</label><br>
+      <label><input type="radio" name="q7" value="c"> Top</label><br>
+      
+      <p>8. In which order are elements processed in a queue?</p>
+      <label><input type="radio" name="q8" value="a"> Last In, First Out (LIFO)</label><br>
+      <label><input type="radio" name="q8" value="b"> First In, Last Out (FILO)</label><br>
+      <label><input type="radio" name="q8" value="c"> First In, First Out (FIFO)</label><br>
+      
+      <p>9. Which operation checks whether the queue is empty or not?</p>
+      <label><input type="radio" name="q9" value="a"> isEmpty</label><br>
+      <label><input type="radio" name="q9" value="b"> isFull</label><br>
+      <label><input type="radio" name="q9" value="c"> isNotEmpty</label><br>
+      
+      <p>10. Which of the following is not a common application of queues?</p>
+      <label><input type="radio" name="q10" value="a"> Printer queues</label><br>
+      <label><input type="radio" name="q10" value="b"> Stack</label><br>
+      <label><input type="radio" name="q10" value="c"> CPU scheduling</label><br>
+    </form>
+    <button onclick="checkAnswers()">Check Answers</button>
+    <p id="quizResult"></p>
+  </section>
+</main>
+
+<footer>
+  <p>&copy; 2024 Queue Demo</p>
+</footer>
+
+<script>
+  var queue = [];
+
+ 
+
+  function peek() {
+    if (queue.length > 0) {
+      document.getElementById('peek').innerText = 'Peek Element: ' + queue[0];
+    } else {
+      document.getElementById('isEmpty').innerText = 'Queue is empty!';
+    }
+  }
+
+  function isEmpty() {
+    if (queue.length === 0) {
+      document.getElementById('isEmpty').innerText = 'Queue is empty!';
+    } else {
+      document.getElementById('isEmpty').innerText = 'Queue is not empty.';
+    }
+  }
+
+  function getSize() {
+    document.getElementById('size').innerText = 'Size of Queue: ' + queue.length;
+  }
+
+  function getFront() {
+    if (queue.length > 0) {
+      document.getElementById('front').innerText = 'Front Element: ' + queue[0];
+    } else {
+      document.getElementById('isEmpty').innerText = 'Queue is empty!';
+    }
+  }
+
+  function getRear() {
+    if (queue.length > 0) {
+      document.getElementById('rear').innerText = 'Rear Element: ' + queue[queue.length - 1];
+    } else {
+      document.getElementById('isEmpty').innerText = 'Queue is empty!';
+    }
+  }
+
+ // Modify your existing functions:
+function enqueue() {
+  var element = Math.floor(Math.random() * 100);
+  queue.push(element);
+  
+  // Show operation status
+  showOperationStatus("Enqueued: " + element);
+  
+  renderQueue();
+  updateInfo();
+}
+
+function dequeue() {
+  if (queue.length > 0) {
+    var removed = queue.shift();
+    // Show operation status
+    showOperationStatus("Dequeued: " + removed);
+    
+    renderQueue(true); // Pass true to indicate dequeue
+    updateInfo();
+  } else {
+    showOperationStatus("Queue is empty!");
+  }
+}
+
+function renderQueue(isDequeue = false) {
+  var elementsDiv = document.querySelector('.queue .elements');
+  elementsDiv.innerHTML = '';
+  
+  queue.forEach(function(element, index) {
+    var elementDiv = document.createElement('div');
+    elementDiv.className = 'queue-element';
+    elementDiv.textContent = element;
+    
+    // Add special classes for front and rear
+    if(index === 0) elementDiv.classList.add('front-element');
+    if(index === queue.length - 1) elementDiv.classList.add('rear-element');
+    
+    // Add animation classes
+    if(index === queue.length - 1 && !isDequeue) {
+      elementDiv.classList.add('enqueue-animation');
+    }
+    
+    elementsDiv.appendChild(elementDiv);
+  });
+  
+  // Apply shift animation to remaining elements after dequeue
+  if(isDequeue) {
+    document.querySelectorAll('.queue-element').forEach(el => {
+      el.classList.add('shift-animation');
+    });
+  }
+}
+
+function showOperationStatus(message) {
+  var status = document.createElement('div');
+  status.className = 'operation-status';
+  status.textContent = message;
+  document.body.appendChild(status);
+  
+  // Remove after animation completes
+  setTimeout(() => {
+    status.remove();
+  }, 2500);
+}
+
+  function updateInfo() {
+    getSize();
+    isEmpty();
+    getFront();
+    getRear();
+  }
+
+  function checkAnswers() {
+    const answers = {
+      'q1': 'b',
+      'q2': 'c',
+      'q3': 'c',
+      'q4': 'a',
+      'q5': 'a',
+      'q6': 'c',
+      'q7': 'a',
+      'q8': 'c',
+      'q9': 'a',
+      'q10': 'b'
+    };
+    const quizResult = document.getElementById('quizResult');
+    const form = document.getElementById('quizForm');
+    let correctCount = 0;
+    for (let q in answers) {
+      const selectedAnswer = form.querySelector('input[name="' + q + '"]:checked');
+      if (selectedAnswer && selectedAnswer.value === answers[q]) {
+        correctCount++;
+      }
+    }
+    quizResult.textContent = 'You got ' + correctCount + ' out of ' + Object.keys(answers).length + ' correct.';
+  }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Graph Operations</title>
+<style>
+  .graph-container {
+  position: relative;
+  width: 800px;
+  height: 500px;
+  margin: 30px auto;
+  background-color: #f2f6ff;
+  border: 1px solid #ccc;
+  border-radius: 12px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+:root {
+    --primary: #e09812;
+    --primary-dark: #d17a11;
+    --secondary: #4CAF50;
+    --light-bg: #f8f9fa;
+    --dark-text: #2c3e50;
+    --light-text: #666;
+    --white: #ffffff;
+    --card-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  }
+      h1, h2 {
+    color: var(--primary);
+    font-weight: 600;
+  }
+  .quiz p {
+  font-weight: 500;
+  margin: 15px 0 8px;
+  color: #333;
+}
+.quiz label:hover {
+  background-color: rgba(224, 152, 18, 0.1);
+}
+.quiz label {
+  display: block;
+  padding: 8px 12px;
+  margin: 5px 0;
+  border-radius: 6px;
+  transition: all 0.2s;
+}
+   .card {
+    background: var(--white);
+    border-radius: 10px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    box-shadow: var(--card-shadow);
+  }
+    body {
+  font-family: 'Poppins', sans-serif;
+  background-color: #f8f9fa;
+  color: #2c3e50;
+  line-height: 1.6;
+  padding: 20px;
+}
+.graph-node {
+  position: absolute;
+  width: 50px;
+  height: 50px;
+  background-color: #f39c12;
+  color: white;
+  font-weight: bold;
+  border: 2px solid #333;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 18px;
+  cursor: pointer;
+  user-select: none;
+  z-index: 2;
+}
+
+.graph-lines {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 800px;
+  height: 500px;
+  z-index: 1;
+}
+#description {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  line-height: 1.7;
+  margin: 20px 0;
+}
+.graph-lines line {
+  stroke: #2c3e50;
+  stroke-width: 2;
+}
+
+  .stack {
+    display: flex;
+    flex-direction: column-reverse;
+    align-items: center;
+    gap: 20px;
+    position: relative;
+  }
+  .node {
+    border: 2px solid #333;
+    border-radius: 5px;
+    width: 100px;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    transition: all 0.5s ease;
+    background-color: #fff;
+    color: #333;
+    font-weight: bold;
+    font-size: 20px;
+  }
+  .arrow {
+    width: 2px;
+    height: 50px;
+    background-color: #333;
+    position: absolute;
+    top: calc(100% + 20px);
+    left: 50%;
+    transition: all 0.5s ease;
+  }
+  button {
+    margin-top: 20px;
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  button:hover {
+    background-color: #45a049;
+  }
+  #peekedElement, #isEmpty {
+    display: none;
+    margin-top: 20px;
+  }
+  #videoContainer {
+    margin-top: 20px;
+  }
+</style>
+</head>
+<body>
+
+<h1>Graph </h1>
+<p id="description">A graph is a data structure consisting of a set of vertices (nodes) connected by edges. It's used to represent relationships between pairs of objects. Graphs can be directed or undirected, and they may have weighted or unweighted edges. Common operations include adding and removing vertices and edges, traversing the graph, and finding paths between vertices.</p>
+
+
+<div id="videoContainer">
+  <h2 style="text-align:center; margin-top:40px;">Interactive Graph Visualization</h2>
+
+<div style="text-align: center;">
+  <button onclick="addNode()">Add Node</button>
+  <button onclick="connectNodes()">Connect Nodes</button>
+  <button onclick="clearGraph()">Clear All</button>
+</div>
+
+<div class="graph-container" id="graphArea">
+  <svg class="graph-lines" id="edgeLayer"></svg>
+</div>
+
+
+<section class="quiz">
+      <h2>Quiz</h2>
+      <form id="quizForm">
+        <p>1. What is a graph in data structures?</p>
+        <label><input type="radio" name="q1" value="a"> A linear data structure</label><br>
+        <label><input type="radio" name="q1" value="b"> A hierarchical data structure</label><br>
+        <label><input type="radio" name="q1" value="c"> A non-linear data structure</label><br>
+
+        <p>2. Which of the following is NOT a basic component of a graph?</p>
+        <label><input type="radio" name="q2" value="a"> Vertex</label><br>
+        <label><input type="radio" name="q2" value="b"> Edge</label><br>
+        <label><input type="radio" name="q2" value="c"> Pointer</label><br>
+
+        <p>3. What does a vertex represent in a graph?</p>
+        <label><input type="radio" name="q3" value="a"> A connection between two nodes</label><br>
+        <label><input type="radio" name="q3" value="b"> A node or entity</label><br>
+        <label><input type="radio" name="q3" value="c"> An edge</label><br>
+
+        <p>4. What does an edge represent in a graph?</p>
+        <label><input type="radio" name="q4" value="a"> A weight</label><br>
+        <label><input type="radio" name="q4" value="b"> A path between two vertices</label><br>
+        <label><input type="radio" name="q4" value="c"> A connection between two vertices</label><br>
+
+        <p>5. Which type of graph has edges with a direction?</p>
+        <label><input type="radio" name="q5" value="a"> Directed graph</label><br>
+        <label><input type="radio" name="q5" value="b"> Undirected graph</label><br>
+        <label><input type="radio" name="q5" value="c"> Bipartite graph</label><br>
+
+        <p>6. What is the degree of a vertex in a graph?</p>
+        <label><input type="radio" name="q6" value="a"> The number of vertices adjacent to it</label><br>
+        <label><input type="radio" name="q6" value="b"> The weight of the edges connected to it</label><br>
+        <label><input type="radio" name="q6" value="c"> The length of the shortest path from it to another vertex</label><br>
+
+        <p>7. Which of the following is a graph traversal algorithm?</p>
+        <label><input type="radio" name="q7" value="a"> Depth-First Search (DFS)</label><br>
+        <label><input type="radio" name="q7" value="b"> Bubble Sort</label><br>
+        <label><input type="radio" name="q7" value="c"> Binary Search</label><br>
+
+        <p>8. Which algorithm is used to find the shortest path in a graph?</p>
+        <label><input type="radio" name="q8" value="a"> Breadth-First Search (BFS)</label><br>
+        <label><input type="radio" name="q8" value="b"> Depth-First Search (DFS)</label><br>
+        <label><input type="radio" name="q8" value="c"> Dijkstra's algorithm</label><br>
+
+        <p>9. Which of the following is NOT a type of graph representation?</p>
+        <label><input type="radio" name="q9" value="a"> Adjacency Matrix</label><br>
+        <label><input type="radio" name="q9" value="b"> Adjacency List</label><br>
+        <label><input type="radio" name="q9" value="c"> Tree</label><br>
+
+        <p>10. Which of the following is NOT a graph traversal algorithm?</p>
+        <label><input type="radio" name="q10" value="a"> Depth-First Search (DFS)</label><br>
+        <label><input type="radio" name="q10" value="b"> Breadth-First Search (BFS)</label><br>
+        <label><input type="radio" name="q10" value="c"> Quick Sort</label><br>
+      </form>
+      <button onclick="checkGraphAnswers()">Check Answers</button>
+      <p id="graphQuizResult"></p>
+    </section>
+  </section>
+</main>
+
+
+
+<script>
+  let nodeCount = 0;
+  const graphArea = document.getElementById("graphArea");
+  const edgeLayer = document.getElementById("edgeLayer");
+  const nodes = [];
+
+  function addNode() {
+    nodeCount++;
+    const node = document.createElement("div");
+    node.className = "graph-node";
+    node.innerText = nodeCount;
+    node.dataset.id = nodeCount;
+
+    // Random position within container bounds
+    const x = Math.floor(Math.random() * 700) + 30;
+    const y = Math.floor(Math.random() * 400) + 30;
+    node.style.left = `${x}px`;
+    node.style.top = `${y}px`;
+
+    graphArea.appendChild(node);
+    nodes.push({ id: nodeCount, x, y, el: node });
+  }
+
+  function connectNodes() {
+    if (nodes.length < 2) {
+      alert("Need at least 2 nodes to connect.");
+      return;
+    }
+
+    // Pick 2 random different nodes
+    const i = Math.floor(Math.random() * nodes.length);
+    let j;
+    do {
+      j = Math.floor(Math.random() * nodes.length);
+    } while (j === i);
+
+    const nodeA = nodes[i];
+    const nodeB = nodes[j];
+
+    // Draw line using SVG
+    const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+    line.setAttribute("x1", nodeA.x + 25);
+    line.setAttribute("y1", nodeA.y + 25);
+    line.setAttribute("x2", nodeB.x + 25);
+    line.setAttribute("y2", nodeB.y + 25);
+    edgeLayer.appendChild(line);
+  }
+
+  function clearGraph() {
+    nodeCount = 0;
+    nodes.length = 0;
+    graphArea.querySelectorAll(".graph-node").forEach(node => node.remove());
+    edgeLayer.innerHTML = "";
+  }
+  
+  function checkGraphAnswers() {
+    const answers = {
+      'q1': 'c',
+      'q2': 'c',
+      'q3': 'b',
+      'q4': 'c',
+      'q5': 'a',
+      'q6': 'a',
+      'q7': 'a',
+      'q8': 'c',
+      'q9': 'c',
+      'q10': 'c'
+    };
+    const quizResult = document.getElementById('graphQuizResult');
+    const form = document.getElementById('quizForm');
+    let correctCount = 0;
+    for (let q in answers) {
+      const selectedAnswer = form.querySelector('input[name="' + q + '"]:checked');
+      if (selectedAnswer && selectedAnswer.value === answers[q]) {
+        correctCount++;
+      }
+    }
+    quizResult.textContent = 'You got ' + correctCount + ' out of ' + Object.keys(answers).length + ' correct.';
+  }
+</script>
+
+</body>
+</html>

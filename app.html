@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SY ADS Lab Assignments</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #e09812;
+            --primary-dark: #d17a11;
+            --secondary: #4CAF50;
+            --light-bg: #f8f9fa;
+            --dark-text: #2c3e50;
+            --light-text: #666;
+            --white: #ffffff;
+            --card-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--light-bg);
+            color: var(--dark-text);
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: var(--white);
+            padding: 2rem 0;
+            text-align: center;
+            box-shadow: var(--card-shadow);
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 600;
+            margin: 0;
+        }
+        
+        nav {
+            background: var(--white);
+            padding: 1rem 0;
+            text-align: center;
+            box-shadow: var(--card-shadow);
+        }
+        
+        nav a {
+            text-decoration: none;
+            color: var(--primary);
+            padding: 0.8rem 1.5rem;
+            border-radius: 6px;
+            margin: 0 0.5rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        nav a:hover {
+            background: rgba(224, 152, 18, 0.1);
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+        }
+        
+        .card {
+            background: var(--white);
+            border-radius: 10px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--card-shadow);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        }
+        
+        h2 {
+            color: var(--primary);
+            font-weight: 600;
+            margin-top: 0;
+            margin-bottom: 1rem;
+        }
+        
+        h2 a {
+            color: inherit;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        
+        h2 a:hover {
+            color: var(--primary-dark);
+        }
+        
+        p {
+            color: var(--light-text);
+            margin-bottom: 0;
+            line-height: 1.7;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 1.5rem;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            nav a {
+                display: block;
+                margin: 0.5rem 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Applications Of ADS</h1>
+    </header>
+    <nav>
+        <a href="#"></a>
+    </nav>
+    <div class="container">
+        <section id="problem_statement" class="card">
+            <h2><a href="idex.html">1. Snake And Ladder Game</a></h2>
+            <p>The snake and ladder game is a classic board game brought to life as an interactive web application developed using CSS, JavaScript, and HTML. Players roll dice to move their tokens across the board, aiming to reach the final square. Along the way, they encounter snakes that send them backward and ladders that propel them forward, adding an element of chance and strategy to the gameplay. The game provides entertainment and nostalgia, offering hours of fun for players of all ages.</p>
+        </section>
+        
+        <section id="maze_game" class="card">
+            <h2><a href="maze.html">2. Maze Game</a></h2>
+            <p>The maze game is an interactive web application built using CSS, JavaScript, and HTML. Players navigate through a maze using keyboard controls, aiming to reach the exit while avoiding obstacles. The game offers a challenging and engaging experience, testing players' problem-solving and reflex skills.</p>
+        </section>
+    </div> 
+</body>
+</html>
